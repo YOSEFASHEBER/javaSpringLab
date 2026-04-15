@@ -3,13 +3,20 @@ package com.ctbe.yosef.product_service.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "products")
 public class Product {
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "productId", nullable = false)
+    private Long id;
 
     @NotBlank(message = "product name must not be blank")
     @Column(nullable = false)
@@ -19,14 +26,9 @@ public class Product {
     @Column(nullable = false)
     private double price;
     public Product(){}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private Category Category;
 
     @Positive(message = "price must be greater than zero")
     public double getPrice() {
@@ -48,8 +50,15 @@ public class Product {
     public Product(String name, double price){
         this.name = name;
         this.price= price;
-
-
-
     }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Long getId() {
+        return id;
+    }
+
+
+
+
 }

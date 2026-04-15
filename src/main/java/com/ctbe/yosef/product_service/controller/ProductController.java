@@ -29,7 +29,7 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
     // ── POST /products ───────────────────────────────────────
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product
                                                          product) {
         Product saved = productService.save(product);
