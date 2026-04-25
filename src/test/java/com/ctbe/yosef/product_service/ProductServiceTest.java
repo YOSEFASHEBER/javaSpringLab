@@ -1,6 +1,7 @@
 package com.ctbe.yosef.product_service;
 
-
+import com.ctbe.yosef.product_service.dto.ProductResponse;
+import com.ctbe.yosef.product_service.exception.ResourceNotFoundException;
 import com.ctbe.yosef.product_service.model.Product;
 import com.ctbe.yosef.product_service.Repository.ProductRepository;
 import com.ctbe.yosef.product_service.service.ProductService;
@@ -14,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,26 +30,27 @@ class ProductServiceTest {
     @Test
     void findById_returnsProduct_whenProductExists() {
 
-        Product laptop = new Product("Laptop", 1200);
+        Product laptop = new Product("Laptop", 1200, 10, "Electronics");
         laptop.setId(1L);
 
         when(productRepository.findById(1L))
                 .thenReturn(Optional.of(laptop));
 
-        Optional<Product> result = productService.findById(1L);
+        ProductResponse result = productService.findById(1L);
 
-        assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Laptop");
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo("Laptop");
+        assertThat(result.getPrice()).isEqualTo(1200);
     }
 
     @Test
-    void findById_returnsEmpty_whenProductNotFound() {
+    void findById_throwsException_whenProductNotFound() {
 
         when(productRepository.findById(99L))
                 .thenReturn(Optional.empty());
 
-        Optional<Product> result = productService.findById(99L);
-
-        assertThat(result).isEmpty();
+        assertThatThrownBy(() -> productService.findById(99L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("99");
     }
 }

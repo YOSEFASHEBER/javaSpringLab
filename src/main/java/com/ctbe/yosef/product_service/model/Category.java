@@ -20,7 +20,7 @@ public class Category {
     @Column(name = "categoryName")
     private String name;
 
-    @OneToMany(mappedBy = "Category")
+    @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 
 }

@@ -12,11 +12,13 @@ import java.util.Map;
 public class HealthController {
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> health() {
-        return ResponseEntity.ok(Map.of(
-                "service", "product-service",
-                "version", "1.0.0",
-                "status", "UP",
-                "timestamp", Instant.now().toString()
-        ));
+
+        Map<String, String> response = new java.util.HashMap<>();
+        response.put("service", "product-service");
+        response.put("version", "1.0.0");
+        response.put("status", "UP");
+        response.put("timestamp", Instant.now().toString());
+
+        return ResponseEntity.ok(response);
     }
 }
